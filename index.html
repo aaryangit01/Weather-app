@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="card">
+      <div class="search">
+        <input type="text" placeholder="Enter city name" spellcheck="false" />
+        <button><img src="images/search.png" alt="" /></button>
+      </div>
+      <div class="weather">
+        <img src="images/rain.png" class="weather-icon" />
+        <h1 class="temp">22°c</h1>
+        <h2 class="city">Kolkata</h2>
+        <div class="details">
+          <div class="column">
+            <img src="images/humidity.png" />
+            <div>
+              <p class="humidity">50%</p>
+              <p>humidity</p>
+            </div>
+          </div>
+          <div class="column">
+            <img src="images/wind.png" />
+            <div>
+              <p class="wind">50kmph</p>
+              <p>wind Speed</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // const apiKey="a11d87e702a135d5c9858c43087b49ed";
+      // const apiUrl="https://api.openweathermap.org/data/2.5/weather?units=metric&q=bangalore";
+
+      // async function checkweather(){
+      //     const response = await fetch(apiUrl + '&appid=${apiKey}');
+      //     var data = await response.json();
+      //     console.log(data);
+
+      //     // document.querySelector(".city").innerHTML = data.name;
+      //     // document.querySelector(".temp").innerHTML = data.main.temp;
+      //     // document.querySelector(".humidity").innerHTML = data.main.humidity;
+      //     // document.querySelector(".wind").innerHTML = data.wind.speed;
+      // }
+
+      // checkweather();
+
+    
+
+      const apiKey = "a11d87e702a135d5c9858c43087b49ed";
+      const apiUrl =
+        "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+      const searchbox = document.querySelector(".search input");
+      const searchbtn = document.querySelector(".search button");
+      const weathericon = document.querySelector(".weather-icon");
+
+      async function checkWeather(city) {
+        try {
+          const response = await fetch(`${apiUrl}${city}&appid=${apiKey}`);
+          const data = await response.json();
+          console.log(data);
+
+          document.querySelector(".city").innerHTML = data.name;
+          document.querySelector(".temp").innerHTML =
+            Math.round(data.main.temp) + "°c";
+          document.querySelector(".humidity").innerHTML =
+            data.main.humidity + "%";
+          document.querySelector(".wind").innerHTML = data.wind.speed + "km/h";
+
+          if (data.weather[0].main == "Clouds") {
+            weathericon.src = "images/clouds.png";
+          } else if (data.weather[0].main == "Rain") {
+            weathericon.src = "images/rain.png";
+          } else if (data.weather[0].main == "Clear") {
+            weathericon.src = "images/clear.png";
+          } else if (data.weather[0].main == "Drizzle") {
+            weathericon.src = "images/drizzle.png";
+          } else if (data.weather[0].main == "Mist") {
+            weathericon.src = "images/mist.png";
+          }
+
+          document.querySelector(".weather").style.display = "block";
+        } catch (error) {
+          console.log("Error fetching weather data:", error);
+        }
+      }
+
+      searchbtn.addEventListener("click", () => {
+        checkWeather(searchbox.value);
+      });
+    </script>
+  </body>
+</html>
